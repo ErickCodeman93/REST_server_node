@@ -1,6 +1,6 @@
-require( 'dotenv' ).config();
 const express = require( 'express' );
 const cors = require( 'cors' );
+const { dbConnection } = require( '../database/config' );
 
 class Server {
 
@@ -12,12 +12,20 @@ class Server {
 			users : '/api/users'
 		};
 
+		//Connection DB
+		this.dbConnect();
+
 		// Middlewares
 		this.middlewares();
 
 		//Routes
 		this.routes();
 	} //end constructor
+
+
+	async dbConnect(){
+		await dbConnection();
+	}
 
 	middlewares(){
 
