@@ -1,6 +1,7 @@
 const { response, request } = require( 'express' );
 const { paginationValidator } = require('../helpers/dbValidators');
 const { encryptPassword } = require('../helpers/encryptPWS');
+
 const User = require( '../models/database/User' );
 
 // ::::::::::::::::::::::::::::::: Controllers ::::::::::::::::::::::
@@ -67,13 +68,14 @@ const putUsers = async ( req = request, res = response ) => {
 const deleteUsers = async ( req = request, res = response ) => {
 
 	const { id  } = req.params;
-
+	const userAuth = req.user;
 	const deleteUser = await User.findByIdAndUpdate( id, { state:false }, { new: true }  );
 
 	res.json( {
 		ok: true,
 		msg: 'delete Api - controller',
-		deleteUser
+		deleteUser,
+		userAuth
 	} );
 } //end function
 
