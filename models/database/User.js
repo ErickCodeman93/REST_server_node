@@ -22,7 +22,7 @@ const UsuarioSchema = Schema({
 	role:{
 		type: String,
 		required: [ true, 'Role is required' ],
-		enum:[ 'ADMIN_ROLE', 'USER_ROLE' ],
+		// enum:[ 'ADMIN_ROLE', 'USER_ROLE' ],
 	},
 	state:{
 		type: Boolean,
@@ -34,5 +34,12 @@ const UsuarioSchema = Schema({
 	},
 });
 
+// Modifica la propiedad de password para no regresarla en el enpoint
+UsuarioSchema.methods.toJSON = function () {
+
+	const { __v, password, ...user } = this.toObject();
+
+	return user;
+}
 
 module.exports = model( 'User' ,UsuarioSchema );

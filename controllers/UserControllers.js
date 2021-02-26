@@ -1,6 +1,6 @@
 const { response, request } = require( 'express' );
-const User = require( '../models/User' );
-const bcryptjs = require( 'bcryptjs' );
+const { encryptPassword } = require('../helpers/encryptPWS');
+const User = require( '../models/database/User' );
 
 // ::::::::::::::::::::::::::::::: Controllers ::::::::::::::::::::::
 
@@ -21,18 +21,7 @@ const postUsers = async ( req = request, res = response ) => {
 	const { name, email, role, password } = req.body;
 	const user = new User( { name, email, role, password } );
 
-	const existEmail = await User.findOne({ email });
-
-	if( existEmail )
-		return res
-			.status( 400 )
-			.json({
-				msg:'Email duplicate'
-			});
-
-	//Encriptar
-	const salt = bcryptjs.genSaltSync();
-	user.password = bcryptjs.hashSync( password, salt );
+	user.password = encryptPassword( password );
 
 	await user.save();
 
@@ -43,14 +32,21 @@ const postUsers = async ( req = request, res = response ) => {
 	} );
 } //end function
 
-const putUsers = ( req = request, res = response ) => {
+const putUsers = async ( req = request, res = response ) => {
 
-	const id = req.params.id;
+	const { id } = req.params;
+	let { _id, password, google, email, ...data } = req.body;
+
+	//Encriptar password
+	if( password )
+		data.password = encryptPassword( password );
+	
+	const userUpdate = await User.findByIdAndUpdate( id, data,  { new: true } );	
 
 	res.json( {
 		ok: true,
 		msg: 'put Api - controller',
-		msg: id
+		userUpdate
 	} );
 } //end function
 
