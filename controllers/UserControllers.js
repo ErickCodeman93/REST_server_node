@@ -1,19 +1,33 @@
 const { response, request } = require( 'express' );
+const { paginationValidator } = require('../helpers/dbValidators');
 const { encryptPassword } = require('../helpers/encryptPWS');
 const User = require( '../models/database/User' );
 
 // ::::::::::::::::::::::::::::::: Controllers ::::::::::::::::::::::
 
-const getUsers = ( req = request, res = response ) => {
+const getUsers = async ( req = request, res = response ) => {
 
-	const params = req.query;
+	const { limit = 5, from = 0 } = req.query;
+
+	let startPagination = paginationValidator( from ); 
+	let endPagination = paginationValidator( limit, true );
+	const query = { state: true };
+
+	const [ total, user ] = await Promise.all([
+		User.countDocuments( query ),
+		User.find( query )
+			.skip( startPagination )
+			.limit( endPagination )
+	]);
 
 	res
 	.json( {
 		ok: true,
 		msg: 'get Api - controller',
-		params
+		total,
+		user,
 	} );
+
 }  //end function
 
 const postUsers = async ( req = request, res = response ) => {
@@ -50,11 +64,16 @@ const putUsers = async ( req = request, res = response ) => {
 	} );
 } //end function
 
-const deleteUsers = ( req = request, res = response ) => {
+const deleteUsers = async ( req = request, res = response ) => {
+
+	const { id  } = req.params;
+
+	const deleteUser = await User.findByIdAndUpdate( id, { state:false }, { new: true }  );
 
 	res.json( {
 		ok: true,
-		msg: 'delete Api - controller'
+		msg: 'delete Api - controller',
+		deleteUser
 	} );
 } //end function
 

@@ -27,8 +27,26 @@ const idValidator = async ( id = '' ) => {
 		throw new Error( `El id: ${ id } no existe en la base de datos` );
 } // end function
 
+
+const paginationValidator = ( startQuery, islimit = false ) => {
+	
+	let isNumber;
+	const reg = /^\d+$/;
+	const queryParam = Number( startQuery );
+
+	if( islimit )
+		isNumber = reg.test( queryParam ) ? Number( queryParam ) : 5;	
+	else
+		isNumber = reg.test( queryParam ) ? Number( queryParam ) - 1 : 0 ;	
+
+	return Math.sign( isNumber ) === -1 ? 0 : isNumber;
+
+} // end function
+
+
 module.exports = {
 	roleValidator,
 	emailValidator,
 	idValidator,
+	paginationValidator,
 }
