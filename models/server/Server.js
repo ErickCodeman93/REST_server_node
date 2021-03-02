@@ -1,6 +1,11 @@
 const express = require( 'express' );
 const cors = require( 'cors' );
 const { dbConnection } = require( '../../database/config' );
+const { 
+	authRoutes,
+	usersApiRoutes,
+	categoriesRoutes,
+	productsRoutes } = require( '../../routers' );
 
 class Server {
 
@@ -11,6 +16,8 @@ class Server {
 		this.routesPath = { 
 			users : '/api/users',
 			authPath: '/api/auth',
+			categories: '/api/categories',
+			products: '/api/products',
 		};
 
 		//Connection DB
@@ -42,8 +49,10 @@ class Server {
 	} //end method
 
 	routes(){
-		this.app.use( this.routesPath.authPath, require('../../routes/auth') );
-		this.app.use( this.routesPath.users, require('../../routes/users.api') );
+		this.app.use( this.routesPath.authPath, authRoutes );
+		this.app.use( this.routesPath.users, usersApiRoutes );
+		this.app.use( this.routesPath.categories, categoriesRoutes );
+		this.app.use( this.routesPath.products, productsRoutes );
 	} //end method
 
 	listen(){

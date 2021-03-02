@@ -1,5 +1,5 @@
 const fs = require( 'fs' );
-const Role = require( '../models/database/Role' );
+const { Role } = require( '../models/database' );
 
 //:::::::::: Seddeer Role :::::::::::::::
 

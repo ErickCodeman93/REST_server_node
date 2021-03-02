@@ -1,5 +1,4 @@
-const Role = require( '../models/database/Role' );
-const User = require('../models/database/User');
+const { Category, Role, User } = require('../models/database');
 
 const roleValidator = async( role = ''  ) => {
         
@@ -43,10 +42,23 @@ const paginationValidator = ( startQuery, islimit = false ) => {
 
 } // end function
 
+const idCategoryValidator = async ( id = '' ) => {
+
+	const existId = await Category.findById( id );
+
+	if( ! existId )
+		throw new Error( `No existe el id ${ existId.id } en la base de datos` );
+
+	if( ! existId.state )
+		throw new Error( `El id ${ existId.id } fue dado de baja en la base de datos` );
+
+} //end function
+
 
 module.exports = {
 	roleValidator,
 	emailValidator,
 	idValidator,
 	paginationValidator,
+	idCategoryValidator,
 }

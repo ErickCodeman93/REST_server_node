@@ -1,24 +1,28 @@
 const { response, request } = require( 'express' );
-const { paginationValidator } = require('../helpers/dbValidators');
-const { encryptPassword } = require('../helpers/encryptPWS');
-
-const User = require( '../models/database/User' );
+const { paginationValidator, encryptPassword } = require('../helpers');
+const { User } = require( '../models/database' );
 
 // ::::::::::::::::::::::::::::::: Controllers ::::::::::::::::::::::
 
 const getUsers = async ( req = request, res = response ) => {
 
-	const { limit = 5, from = 0 } = req.query;
-
-	let startPagination = paginationValidator( from ); 
-	let endPagination = paginationValidator( limit, true );
+	let startPagination;
+	let endPagination;
 	const query = { state: true };
+
+	if( Object.keys( req.query ).length ) {
+
+		const { limit = 5, from = 0 } = req.query;
+		startPagination = paginationValidator( from ); 
+		endPagination = paginationValidator( limit, true );
+
+	} // end if
 
 	const [ total, user ] = await Promise.all([
 		User.countDocuments( query ),
 		User.find( query )
-			.skip( startPagination )
-			.limit( endPagination )
+			.skip( startPagination ? startPagination : '' )
+			.limit( endPagination ? endPagination : '' )
 	]);
 
 	res

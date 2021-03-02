@@ -1,5 +1,5 @@
-const { Router } = require('express');
-const { check } = require('express-validator');
+const { Router } = require( 'express' );
+const { check } = require( 'express-validator' );
 
 const { 
     validateJWT,
@@ -12,12 +12,12 @@ const {
     getUsers, 
     postUsers, 
     putUsers, 
-    deleteUsers } = require('../controllers/UserControllers');
+    deleteUsers } = require( '../controllers' );
 
 const { 
     roleValidator, 
     emailValidator, 
-    idValidator } = require('../helpers/dbValidators');
+    idValidator } = require( '../helpers' );
 
 const router = Router();
 

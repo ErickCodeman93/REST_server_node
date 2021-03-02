@@ -1,7 +1,7 @@
 const { request, response } = require('express');
 const jwt = require( 'jsonwebtoken' );
 
-const User = require( '../models/database/User' );
+const { User } = require( '../models/database' );
 
 const validateJWT = async ( req = request, res = response, next ) => {
 
@@ -39,6 +39,7 @@ const validateJWT = async ( req = request, res = response, next ) => {
 	} // end try 
 	catch (error) {
 
+		console.log( error );
 		res.status( 401 )
 					.json({
 						msg:'Token no valido'
