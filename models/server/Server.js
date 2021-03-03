@@ -5,7 +5,8 @@ const {
 	authRoutes,
 	usersApiRoutes,
 	categoriesRoutes,
-	productsRoutes } = require( '../../routers' );
+	productsRoutes,
+	searchRoutes } = require( '../../routers' );
 
 class Server {
 
@@ -18,6 +19,7 @@ class Server {
 			authPath: '/api/auth',
 			categories: '/api/categories',
 			products: '/api/products',
+			search: '/api/search',
 		};
 
 		//Connection DB
@@ -53,6 +55,7 @@ class Server {
 		this.app.use( this.routesPath.users, usersApiRoutes );
 		this.app.use( this.routesPath.categories, categoriesRoutes );
 		this.app.use( this.routesPath.products, productsRoutes );
+		this.app.use( this.routesPath.search, searchRoutes );
 	} //end method
 
 	listen(){

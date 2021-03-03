@@ -1,4 +1,4 @@
-const { Category, Role, User } = require('../models/database');
+const { Category, Role, User, Product } = require('../models/database');
 
 const roleValidator = async( role = ''  ) => {
         
@@ -54,6 +54,18 @@ const idCategoryValidator = async ( id = '' ) => {
 
 } //end function
 
+const idProductValidator = async ( id = '' ) => {
+
+	const existId = await Product.findById( id );
+
+	if( ! existId )
+		throw new Error( `No existe el id ${ existId.id } en la base de datos` );
+
+	if( ! existId.state )
+		throw new Error( `El id ${ existId.id } fue dado de baja en la base de datos` );
+
+} //end function
+
 
 module.exports = {
 	roleValidator,
@@ -61,4 +73,5 @@ module.exports = {
 	idValidator,
 	paginationValidator,
 	idCategoryValidator,
+	idProductValidator
 }
