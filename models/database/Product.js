@@ -25,7 +25,8 @@ const ProductSchema = Schema({
 		required: true,
 	},
 	description: { type: String, default: '' },
-	available: { type: Boolean, default: true }
+	available: { type: Boolean, default: true },
+	image: { type: String },
 });
 
 // Modifica la propiedad de password para no regresarla en el enpoint

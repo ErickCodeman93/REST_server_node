@@ -6,6 +6,8 @@ const roleValidator = async( role = ''  ) => {
 	
 	if( ! existRole )
 		throw new Error( `El rol ${ role } no esta registrado en la base de datos` );
+
+	return true
 	
 } // end function
 
@@ -15,6 +17,8 @@ const emailValidator = async ( email = '' ) => {
 
 	if( existEmail )
 		throw new Error( `El email: ${ email } ya existe en la base de datos` );
+	
+	return true
 			
 } // end function
 
@@ -24,6 +28,8 @@ const idValidator = async ( id = '' ) => {
 
 	if( ! existId )
 		throw new Error( `El id: ${ id } no existe en la base de datos` );
+
+	return true
 } // end function
 
 
@@ -52,6 +58,8 @@ const idCategoryValidator = async ( id = '' ) => {
 	if( ! existId.state )
 		throw new Error( `El id ${ existId.id } fue dado de baja en la base de datos` );
 
+	return true
+
 } //end function
 
 const idProductValidator = async ( id = '' ) => {
@@ -64,6 +72,18 @@ const idProductValidator = async ( id = '' ) => {
 	if( ! existId.state )
 		throw new Error( `El id ${ existId.id } fue dado de baja en la base de datos` );
 
+	return true
+
+} //end function
+
+const coleccionPermitidas = ( coleccion = '', colecciones = [] ) => {
+
+	const incluida = colecciones.includes( coleccion );
+
+	if( ! incluida )
+		throw new Error( `Las colecciones permitidas son ${ colecciones }` );
+
+	return true
 } //end function
 
 
@@ -73,5 +93,6 @@ module.exports = {
 	idValidator,
 	paginationValidator,
 	idCategoryValidator,
-	idProductValidator
+	idProductValidator,
+	coleccionPermitidas
 }
